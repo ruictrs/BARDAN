@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>娇娇生日快乐</title>
+    <style>
+        :root {
+            --base-scale: 1;
+            --main-color: #ffd74d;
+        }
+
+        body {
+            margin: 0;
+            height: 100vh;
+            background: linear-gradient(45deg, #0a043c 20%, #1a237e 50%, #4a148c 100%);
+            overflow: hidden;
+            font-family: 'Microsoft YaHei', sans-serif;
+            perspective: 1000px;
+        }
+
+        .container {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transform: scale(var(--base-scale));
+            transform-origin: center;
+        }
+
+        /* 3D星空层 */
+        .star-layer {
+            position: fixed;
+            width: 200vw;
+            height: 200vh;
+            transform-style: preserve-3d;
+            animation: starMove 120s linear infinite;
+        }
+
+        @keyframes starMove {
+            0% { transform: translateZ(-100px) translateX(0); }
+            100% { transform: translateZ(-100px) translateX(-50%); }
+        }
+
+        .depth-2 { 
+            animation: starMoveDeep 80s linear infinite;
+        }
+
+        @keyframes starMoveDeep {
+            0% { transform: translateZ(-200px) translateX(0); }
+            100% { transform: translateZ(-200px) translateX(-30%); }
+        }
+
+        /* 3D星球 */
+        .planet {
+            position: absolute;
+            border-radius: 50%;
+            transform-style: preserve-3d;
+            animation: planetOrbit 40s linear infinite;
+            box-shadow: 0 0 30px rgba(255,255,255,0.1);
+        }
+
+        .planet::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: inherit;
+            transform: translateZ(15px);
+            filter: brightness(1.2);
+        }
+
+        .planet::after {
+            content: '';
+            position: absolute;
+            width: 120%;
+            height: 120%;
+            top: -10%;
+            left: -10%;
+            border-radius: 50%;
+            background: radial-gradient(circle at 50% 50%, 
+                rgba(255,255,255,0.3) 0%,
+                rgba(255,255,255,0) 70%);
+            animation: glow 4s ease-in-out infinite;
+        }
+
+        @keyframes planetOrbit {
+            0% { 
+                transform: rotate(0deg) 
+                          translateX(min(200px, 30vw)) 
+                          rotate(0deg)
+                          rotateX(15deg); 
+            }
+            100% { 
+                transform: rotate(360deg) 
+                          translateX(min(200px, 30vw)) 
+                          rotate(-360deg)
+                          rotateX(15deg); 
+            }
+        }
+
+        @keyframes glow {
+            0%, 100% { opacity: 0.5; transform: scale(0.95); }
+            50% { opacity: 0.8; transform: scale(1.05); }
+        }
+
+        /* 流星特效 */
+        .meteor {
+            position: absolute;
+            width: 120px;
+            height: 2px;
+            background: linear-gradient(90deg, rgba(255,255,255,0) 0%, #fff 70%);
+            transform: rotate(-45deg);
+            animation: meteorFall 2s linear infinite;
+            filter: drop-shadow(0 0 5px white);
+            left: -20vw;
+            z-index: 1;
+        }
+
+        @keyframes meteorFall {
+            0% { transform: rotate(-45deg) translateX(-30vw); opacity: 0.8; }
+            100% { transform: rotate(-45deg) translateX(150vh); opacity: 0; }
+        }
+
+        /* 文字内容 */
+        .birthday-text {
+            text-align: center;
+            color: #fff;
+            z-index: 2;
+            text-shadow: 0 0 15px var(--main-color);
+            width: 90vw;
+            max-width: 800px;
+        }
+
+        h1 {
+            font-size: clamp(2rem, 6vw, 4rem);
+            margin: 2vh 0;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .message-box {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 3vh 5vw;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            margin: 2vh 0;
+            box-shadow: 0 0 30px rgba(0,0,0,0.3);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .fa-magic {
+            color: var(--main-color);
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            margin: 0 10px;
+            animation: spin 4s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            :root {
+                --base-scale: 0.95;
+            }
+            .planet {
+                animation-duration: 25s;
+            }
+            .message-box {
+                padding: 2vh 5vw;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="star-layer depth-1"></div>
+        <div class="star-layer depth-2"></div>
+        <div class="star-layer depth-3"></div>
+
+        <div class="decorations">
+            <!-- 流星 -->
+            <div class="meteor" style="top:15%;animation-delay:-1s"></div>
+            <div class="meteor" style="top:30%;animation-delay:-3s"></div>
+
+            <!-- 3D星球 -->
+            <div class="planet" style="
+                width: 60px; height: 60px;
+                background: radial-gradient(circle at 30% 30%, 
+                    #ff6b6b, #ff1a1a);
+                left: 20%; top: 70%;
+                animation-delay: -5s;
+            "></div>
+
+            <div class="planet" style="
+                width: 80px; height: 80px;
+                background: radial-gradient(circle at 70% 30%, 
+                    #8ec5fc, #4dabf7);
+                left: 80%; top: 30%;
+                animation-delay: -10s;
+            "></div>
+
+            <div class="planet" style="
+                width: 100px; height: 100px;
+                background: radial-gradient(circle at 50% 70%, 
+                    #b19cd9, #6a1b9a);
+                left: 40%; top: 20%;
+                animation-duration: 50s;
+            "></div>
+
+            <div class="planet" style="
+                width: 45px; height: 45px;
+                background: radial-gradient(circle at 10% 50%, 
+                    #ffd8a8, #ffab40);
+                left: 60%; top: 80%;
+                animation-duration: 30s;
+            "></div>
+        </div>
+
+        <div class="birthday-text">
+            <div class="message-box">
+                <i class="fas fa-magic"></i>
+                <h1>娇娇 生日快乐</h1>
+                <i class="fas fa-magic"></i>
+                <p style="font-size: clamp(1rem, 3vw, 1.5rem); line-height: 1.6; margin: 2vh 0;">
+                    愿你每天都很开心<br>
+                    每一天都有充满喜悦的惊喜<br>
+                    与美好不期而遇，和快乐朝夕相伴<br>
+                    祝你生日快乐，愿你今后万事顺意✨
+                </p>
+                <div style="margin-top: 3vh;">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-heart"></i>
+                    <i class="fas fa-gift"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <audio autoplay loop>
+        <source src="https://cdn.pixabay.com/download/audio/2023/04/05/audio_86c6b55e9a.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        // 生成动态3D星空
+        function create3DStars() {
+            const layers = document.querySelectorAll('.star-layer');
+            layers.forEach((layer, index) => {
+                layer.style.animationDuration = `${120 - index*40}s`;
+                
+                for(let j=0; j<150; j++){
+                    const star = document.createElement('div');
+                    star.style.cssText = `
+                        position: absolute;
+                        left: ${Math.random()*200}%;
+                        top: ${Math.random()*200}%;
+                        width: ${Math.random()*3}px;
+                        height: ${Math.random()*3}px;
+                        background: rgba(255,255,255,${Math.random()*0.6});
+                        border-radius: 50%;
+                        animation: 
+                            twinkle ${3+Math.random()*5}s infinite,
+                            starDrift ${50 + Math.random()*100}s linear infinite;
+                        transform: translateZ(${Math.random()*50}px);
+                    `;
+                    layer.appendChild(star);
+                }
+            });
+        }
+
+        // 生成动态流星
+        function createMeteors() {
+            setInterval(() => {
+                const meteor = document.createElement('div');
+                meteor.className = 'meteor';
+                meteor.style.cssText = `
+                    top: ${Math.random()*100}%;
+                    animation-duration: ${1+Math.random()*2}s;
+                    opacity: ${0.3+Math.random()*0.5};
+                `;
+                document.querySelector('.decorations').appendChild(meteor);
+                setTimeout(() => meteor.remove(), 2000);
+            }, 2500);
+        }
+
+        // 屏幕适配
+        function adjustScale() {
+            const aspectRatio = window.innerWidth / window.innerHeight;
+            let scale = 1;
+            if(aspectRatio < 0.8) scale = 0.9;
+            if(aspectRatio > 1.8) scale = 1.05;
+            document.documentElement.style.setProperty('--base-scale', scale);
+        }
+
+        window.addEventListener('resize', adjustScale);
+        
+        // 初始化
+        create3DStars();
+        createMeteors();
+        adjustScale();
+    </script>
+</body>
+</html>
